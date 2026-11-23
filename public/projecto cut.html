@@ -115,6 +115,42 @@
   .btnline:active{background:#141414}
   .err{color:#b8321f}
 
+
+  /* ---------- regiões do multiplayer ---------- */
+  #scrHost,#scrJoin{position:fixed}
+  .region-launch{position:absolute;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));
+    width:52px;height:52px;border:1px solid #2f2a26;border-radius:50%;background:#080808;color:#ece7df;
+    display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px #151515;z-index:3}
+  .region-launch:active{background:#141414}
+  .region-launch svg{width:28px;height:28px;display:block;shape-rendering:crispEdges;image-rendering:pixelated}
+  .region-panel{position:absolute;top:calc(max(10px,env(safe-area-inset-top)) + 58px);right:max(10px,env(safe-area-inset-right));
+    width:min(92vw,290px);background:#050505;border:1px solid #2a2a2a;box-shadow:0 0 0 1px #101010;padding:10px;z-index:4}
+  .region-panel[hidden]{display:none!important}
+  .region-panel-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+  .region-panel-head strong{font-size:10px;letter-spacing:.18em;color:#ece7df}
+  .region-summary{font-size:9px;letter-spacing:.08em;color:#b9b1a7;text-align:right}
+  .region-meta{font-size:9px;line-height:1.35;letter-spacing:.06em;color:#857d73;margin-bottom:8px}
+  .region-list{display:flex;flex-direction:column;gap:6px;max-height:min(48vh,280px);overflow:auto;padding-right:2px}
+  .region-option{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;
+    padding:8px 9px;border:1px solid #232323;background:#090909;color:#bfb7ad;text-align:left}
+  .region-option:active{background:#141414}
+  .region-option.on{border-color:#d6d1c9;background:#121212;color:#f2eee9;box-shadow:0 0 0 1px #3b3733 inset}
+  .region-copy{display:flex;flex-direction:column;min-width:0;gap:2px}
+  .region-copy strong{font-size:10px;letter-spacing:.14em;line-height:1.1}
+  .region-copy small{font-size:8px;letter-spacing:.06em;line-height:1.25;color:#8b8379}
+  .region-option.on .region-copy small{color:#bdb4aa}
+  .region-ping{font-size:10px;letter-spacing:.08em;color:#e0d4b5;white-space:nowrap}
+  .region-option[data-ms="high"] .region-ping{color:#dfad79}
+  .region-option[data-ms="low"] .region-ping{color:#b6ddbf}
+  .region-option[data-ms="none"] .region-ping{color:#7c746b}
+  @media (orientation:landscape) and (max-height:600px){
+    .region-launch{top:max(8px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));width:44px;height:44px}
+    .region-launch svg{width:24px;height:24px}
+    .region-panel{top:calc(max(8px,env(safe-area-inset-top)) + 48px);width:min(46vw,280px);padding:8px}
+    .region-list{max-height:min(56vh,220px)}
+    .region-option{padding:6px 7px}
+  }
+
   /* ---------- controles ---------- */
   #touch{position:fixed;inset:0;z-index:10;pointer-events:none}
   #stickZone{position:absolute;left:0;top:0;width:58%;height:100%;pointer-events:auto;touch-action:none}
@@ -1020,6 +1056,12 @@
 
 <!-- CRIAR SALA -->
 <div class="screen hidden" id="scrHost">
+  <button class="region-launch" id="hostRegionBtn" type="button" aria-label="Selecionar região do multiplayer"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1" y="1" width="14" height="14" fill="#0d2230" stroke="#d8d2ca"/><rect x="4" y="3" width="3" height="2" fill="#79b46b"/><rect x="8" y="4" width="4" height="3" fill="#79b46b"/><rect x="3" y="7" width="5" height="4" fill="#79b46b"/><rect x="9" y="9" width="3" height="2" fill="#79b46b"/><rect x="6" y="12" width="4" height="1" fill="#79b46b"/></svg></button>
+  <div class="region-panel" id="hostRegionPanel" hidden>
+    <div class="region-panel-head"><strong>REGIÃO DA SALA</strong><span class="region-summary" id="hostRegionSummary">AUTOMÁTICA</span></div>
+    <div class="region-meta" id="hostRegionMeta">Escolha uma região fixa ou deixe no automático para o jogo buscar a melhor rota.</div>
+    <div class="region-list" id="hostRegionList"></div>
+  </div>
   <div class="lbl" style="text-align:center">SALA CRIADA</div>
   <div class="code" id="roomCode">-----</div>
   <div class="status" id="hostStatus">aguardando oponente…</div>
@@ -1038,6 +1080,12 @@
 
 <!-- ENTRAR EM SALA -->
 <div class="screen hidden" id="scrJoin">
+  <button class="region-launch" id="joinRegionBtn" type="button" aria-label="Selecionar região do multiplayer"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1" y="1" width="14" height="14" fill="#0d2230" stroke="#d8d2ca"/><rect x="4" y="3" width="3" height="2" fill="#79b46b"/><rect x="8" y="4" width="4" height="3" fill="#79b46b"/><rect x="3" y="7" width="5" height="4" fill="#79b46b"/><rect x="9" y="9" width="3" height="2" fill="#79b46b"/><rect x="6" y="12" width="4" height="1" fill="#79b46b"/></svg></button>
+  <div class="region-panel" id="joinRegionPanel" hidden>
+    <div class="region-panel-head"><strong>REGIÃO DA SALA</strong><span class="region-summary" id="joinRegionSummary">AUTOMÁTICA</span></div>
+    <div class="region-meta" id="joinRegionMeta">Você pode ver os pings por região aqui. Ao entrar, a sala ainda segue a região criada pelo anfitrião.</div>
+    <div class="region-list" id="joinRegionList"></div>
+  </div>
   <div class="lbl" style="text-align:center">CÓDIGO DA SALA</div>
   <input id="inpCode" maxlength="6" inputmode="text" autocapitalize="characters"
          autocomplete="off" autocorrect="off" spellcheck="false" placeholder="------">
@@ -4175,7 +4223,8 @@ function drawHUD(){
     var ping=Math.round(Net.rtt||0);
     ctx.textAlign='center';ctx.font='bold 8px "Courier New",monospace';
     ctx.fillStyle=alive ? (ping>150?'#e6b06a':ping>90?'#e0c69c':'#b3dfc0') : '#e79c82';
-    ctx.fillText(alive ? (ping ? 'PING '+ping+'ms' : 'ONLINE') : 'RECONEXÃO...',VW/2,24);
+    var modeLabel=PeerDirect.usingDirect()?'DIRETO':'SERVIDOR';
+    ctx.fillText(alive ? ((ping?'PING '+ping+'ms':'ONLINE')+' · '+modeLabel) : 'RECONEXÃO...',VW/2,24);
   }
   // contagem de início (3, 2, 1, 殺す)
   if (G.phase === 'intro' && G.mode !== 'mpwait' && G.mode !== 'menu'){
@@ -4620,22 +4669,34 @@ function stickMove(x,y){
   stick.knob.style.left = (stick.ox+kx)+'px';
   stick.knob.style.top = (stick.oy+ky)+'px';
   var m = clamp(dx/34,-1,1);
+  var oldMove=input.move;
   input.move = Math.abs(m)<0.22 ? 0 : m;
+  if (Math.abs(oldMove-input.move)>0.12) sendGuestMoveImmediately();
   if (dy < -20) setAim(1);
   else if (dy > 24) setAim(-1);
   else if (Math.abs(dy) < 14) setAim(0);
   var h = document.getElementById('hint'); if (h) h.classList.add('hidden');
 }
 function stickEnd(){
+  var wasMoving=input.move;
   stick.active = false; input.move = 0;
+  if (Math.abs(wasMoving)>0.01) sendGuestMoveImmediately(true);
   stick.base.classList.remove('on'); stick.knob.classList.remove('on');
   document.getElementById('stickZone').classList.remove('stick-active');
+}
+function sendGuestMoveImmediately(force){
+  if(G.mode!=='guest' || Net.state!=='on')return;
+  var now=Date.now();
+  if(!force && now-(Net.lastImmediateMoveAt||0)<34)return;
+  Net.lastImmediateMoveAt=now;
+  Net.lastMove=input.move;Net.lastAim=G.player?G.player.aim:0;
+  Net.sendInput(input.move,Net.lastAim,0);
 }
 function setAim(v){
   if (!G.player) return;
   if (G.player.aim !== v){
     G.player.aim = v;
-    if (G.mode === 'guest') Net.sendInput(input.move, v, 0);
+    if (G.mode === 'guest') {Net.lastAimAt=Date.now();Net.sendInput(input.move,v,0);}
     Sfx.tone(v===0?340:(v===1?460:260),0.035,'square',0.03,null);
   }
 }
@@ -4673,12 +4734,19 @@ function bindBtn(id, down, up){
 
 function canActNow(){ return G.phase === 'fight' && !G.paused && G.player; }
 
+// O convidado vê a ação no mesmo toque. A autoridade do resultado continua com o anfitrião.
+function guestPredictAction(bit,accepted){
+  if(!accepted)return false;
+  var seq=Net.action(bit);
+  Net.predictedAction={seq:seq,at:Date.now(),bit:bit};
+  return true;
+}
 function cmdAttack(){
-  if (G.mode === 'guest'){ Net.action(1); if (canActNow()) G.player.tryAttack(); Sfx.whoosh(); return; }
+  if (G.mode === 'guest'){ if(canActNow())guestPredictAction(1,G.player.tryAttack()); return; }
   if (canActNow()) G.player.tryAttack();
 }
 function cmdDuck(){
-  if (G.mode === 'guest'){ Net.action(2); if (canActNow()) G.player.tryDodge('duck', true); return; }
+  if (G.mode === 'guest'){ if(canActNow())guestPredictAction(2,G.player.tryDodge('duck',true)); return; }
   if (canActNow()) G.player.tryDodge('duck', true);
 }
 function cmdDuckUp(){
@@ -4687,12 +4755,12 @@ function cmdDuckUp(){
 }
 function cmdSide(){
   if (canActNow() && G.player.dashCd > 0) return;
-  if (G.mode === 'guest'){ Net.action(4); if (canActNow()) G.player.tryDodge('sidestep', false); return; }
+  if (G.mode === 'guest'){ if(canActNow())guestPredictAction(4,G.player.tryDodge('sidestep',false)); return; }
   if (canActNow()) G.player.tryDodge('sidestep', false);
 }
 function cmdShove(){
   if (canActNow() && G.player.shoveCd > 0) return;
-  if (G.mode === 'guest'){ Net.action(8); if (canActNow()) G.player.tryShove(); return; }
+  if (G.mode === 'guest'){ if(canActNow())guestPredictAction(8,G.player.tryShove()); return; }
   if (canActNow()) G.player.tryShove();
 }
 
@@ -4708,8 +4776,8 @@ window.addEventListener('keydown', function(ev){
   if (keys[k]) return;
   keys[k] = true;
   Sfx.resume();
-  if (k==='a'||k==='arrowleft') input.move = -1;
-  if (k==='d'||k==='arrowright') input.move = 1;
+  if (k==='a'||k==='arrowleft') {input.move = -1;sendGuestMoveImmediately(true);}
+  if (k==='d'||k==='arrowright') {input.move = 1;sendGuestMoveImmediately(true);}
   if (k==='w'||k==='arrowup') setAim(1);
   if (k==='s'||k==='arrowdown') setAim(-1);
   if (k==='j'||k==='z'||k===' ') cmdAttack();
@@ -4721,8 +4789,8 @@ window.addEventListener('keydown', function(ev){
 window.addEventListener('keyup', function(ev){
   var k = ev.key.toLowerCase();
   keys[k] = false;
-  if ((k==='a'||k==='arrowleft') && input.move<0) input.move = 0;
-  if ((k==='d'||k==='arrowright') && input.move>0) input.move = 0;
+  if ((k==='a'||k==='arrowleft') && input.move<0) {input.move = 0;sendGuestMoveImmediately(true);}
+  if ((k==='d'||k==='arrowright') && input.move>0) {input.move = 0;sendGuestMoveImmediately(true);}
   if (k==='k'||k==='x') cmdDuckUp();
   if (k==='w'||k==='s'||k==='arrowup'||k==='arrowdown') setAim(0);
 });
@@ -4880,6 +4948,205 @@ function pickServerField(id){
    O tempo é medido até cada objeto candidato, não apenas até a borda HTTP.
    Só o anfitrião mede: o convidado sempre entra no ID da mesma sala. */
 var REGION_AUTO_CANDIDATES=['auto','enam','wnam','weur','eeur','apac','oc'];
+
+var REGION_SELECT_KEY='projecto_cut_region_pref_v3';
+var REGION_LABELS={
+  auto:{name:'AUTOMÁTICA',desc:'o jogo testa e escolhe a melhor rota'},
+  enam:{name:'AM. N. LESTE',desc:'Costa leste da América do Norte'},
+  wnam:{name:'AM. N. OESTE',desc:'Costa oeste da América do Norte'},
+  weur:{name:'EUROPA OESTE',desc:'Europa ocidental'},
+  eeur:{name:'EUROPA LESTE',desc:'Europa oriental'},
+  apac:{name:'ÁSIA / PACÍFICO',desc:'Ásia e Pacífico'},
+  oc:{name:'OCEANIA',desc:'Austrália e região'}
+};
+var REGION_UI_CONFIG={
+  host:{fieldId:'netHostUrl',buttonId:'hostRegionBtn',panelId:'hostRegionPanel',listId:'hostRegionList',metaId:'hostRegionMeta',summaryId:'hostRegionSummary',joinNote:false},
+  join:{fieldId:'netJoinUrl',buttonId:'joinRegionBtn',panelId:'joinRegionPanel',listId:'joinRegionList',metaId:'joinRegionMeta',summaryId:'joinRegionSummary',joinNote:true}
+};
+var REGION_PING_CACHE={};
+function readRegionPref(){
+  var pref='auto';
+  try{pref=localStorage.getItem(REGION_SELECT_KEY)||'auto';}catch(e){}
+  return REGION_AUTO_CANDIDATES.indexOf(pref)>=0?pref:'auto';
+}
+function setRegionPref(pref){
+  if(REGION_AUTO_CANDIDATES.indexOf(pref)<0)pref='auto';
+  try{localStorage.setItem(REGION_SELECT_KEY,pref);}catch(e){}
+}
+function regionLabel(region){
+  return (REGION_LABELS[region]&&REGION_LABELS[region].name)||String(region||'auto').toUpperCase();
+}
+function regionDesc(region){
+  return (REGION_LABELS[region]&&REGION_LABELS[region].desc)||'';
+}
+function formatRegionPing(ms){
+  return Number.isFinite(ms)?(Math.round(ms)+' ms'):'--';
+}
+function regionTone(ms){
+  if(!Number.isFinite(ms))return 'none';
+  return ms<=95?'low':(ms<=165?'mid':'high');
+}
+function regionMetaText(kind,text){
+  var cfg=REGION_UI_CONFIG[kind],meta=document.getElementById(cfg.metaId);
+  if(meta)meta.textContent=text;
+}
+function regionSummaryText(kind,text){
+  var cfg=REGION_UI_CONFIG[kind],sum=document.getElementById(cfg.summaryId);
+  if(sum)sum.textContent=text;
+}
+function bestRegionFromMeasures(map){
+  if(!map)return null;
+  var valid=REGION_AUTO_CANDIDATES.filter(function(region){return Number.isFinite(map[region]);}).map(function(region){return {region:region,ms:map[region]};});
+  if(!valid.length)return null;
+  valid.sort(function(a,b){return a.ms-b.ms;});
+  var automatic=valid.find(function(x){return x.region==='auto';});
+  return (automatic && automatic.ms<=valid[0].ms+12)?automatic:valid[0];
+}
+function regionSelectionSummary(){
+  var pref=readRegionPref();
+  return pref==='auto'?'AUTOMÁTICA':regionLabel(pref);
+}
+function updateRegionSelectionUI(){
+  var pref=readRegionPref();
+  Object.keys(REGION_UI_CONFIG).forEach(function(kind){
+    var cfg=REGION_UI_CONFIG[kind];
+    regionSummaryText(kind,regionSelectionSummary());
+    var list=document.getElementById(cfg.listId);
+    if(!list)return;
+    [].forEach.call(list.querySelectorAll('.region-option'),function(btn){
+      btn.classList.toggle('on',btn.getAttribute('data-region')===pref);
+      btn.setAttribute('aria-pressed',String(btn.getAttribute('data-region')===pref));
+    });
+  });
+}
+function setRegionRowPing(kind,region,ms){
+  var cfg=REGION_UI_CONFIG[kind],list=document.getElementById(cfg.listId);
+  if(!list)return;
+  var row=list.querySelector('.region-option[data-region="'+region+'"]');
+  if(!row)return;
+  var ping=row.querySelector('.region-ping');
+  row.setAttribute('data-ms',regionTone(ms));
+  if(ping)ping.textContent=formatRegionPing(ms);
+}
+function setRegionRowsLoading(kind){
+  var cfg=REGION_UI_CONFIG[kind],list=document.getElementById(cfg.listId);
+  if(!list)return;
+  [].forEach.call(list.querySelectorAll('.region-option'),function(row){
+    row.setAttribute('data-ms','none');
+    var ping=row.querySelector('.region-ping');
+    if(ping)ping.textContent='...';
+  });
+}
+function readRegionCache(endpoint){
+  var item=REGION_PING_CACHE[endpoint];
+  return item && Date.now()-item.ts<30000 ? item.data : null;
+}
+function writeRegionCache(endpoint,data){
+  REGION_PING_CACHE[endpoint]={ts:Date.now(),data:data};
+}
+function measureRegionSet(wsEndpoint,onUpdate){
+  var cached=readRegionCache(wsEndpoint);
+  if(cached){
+    REGION_AUTO_CANDIDATES.forEach(function(region){ if(onUpdate)onUpdate(region,cached[region]); });
+    return Promise.resolve(cached);
+  }
+  var data={};
+  return Promise.all(REGION_AUTO_CANDIDATES.map(function(region){
+    return measureRegion(wsEndpoint,region).then(function(res){
+      data[region]=res.ms;
+      if(onUpdate)onUpdate(region,res.ms);
+      return res;
+    });
+  })).then(function(){ writeRegionCache(wsEndpoint,data); return data; });
+}
+function closeRegionPanels(){
+  Object.keys(REGION_UI_CONFIG).forEach(function(kind){
+    var panel=document.getElementById(REGION_UI_CONFIG[kind].panelId);
+    if(panel)panel.hidden=true;
+  });
+}
+function refreshRegionPanel(kind,force){
+  var cfg=REGION_UI_CONFIG[kind];
+  if(!cfg)return;
+  updateRegionSelectionUI();
+  var endpoint=pickServerField(cfg.fieldId);
+  if(!endpoint){
+    regionMetaText(kind,'Informe o endereço do servidor para medir o ping das regiões.');
+    REGION_AUTO_CANDIDATES.forEach(function(region){setRegionRowPing(kind,region,Infinity);});
+    return;
+  }
+  if(!isCloudflareEndpoint(endpoint)){
+    regionMetaText(kind,'Este servidor usa uma rota única; a seleção manual de regiões vale para servidores Cloudflare.');
+    REGION_AUTO_CANDIDATES.forEach(function(region){setRegionRowPing(kind,region,Infinity);});
+    return;
+  }
+  var cached=!force && readRegionCache(endpoint);
+  if(cached){
+    REGION_AUTO_CANDIDATES.forEach(function(region){setRegionRowPing(kind,region,cached[region]);});
+    var best=bestRegionFromMeasures(cached);
+    regionMetaText(kind,best ? ('Melhor resposta agora: '+regionLabel(best.region)+' · '+formatRegionPing(best.ms)+'.') : 'Não foi possível medir as regiões agora.');
+    return;
+  }
+  regionMetaText(kind,'Medindo o ping de cada região…');
+  setRegionRowsLoading(kind);
+  measureRegionSet(endpoint,function(region,ms){ setRegionRowPing(kind,region,ms); }).then(function(map){
+    var best=bestRegionFromMeasures(map);
+    regionMetaText(kind,best ? ('Melhor resposta agora: '+regionLabel(best.region)+' · '+formatRegionPing(best.ms)+'.') : 'Não foi possível medir as regiões agora.');
+  }).catch(function(){
+    regionMetaText(kind,'Falha ao medir as regiões agora.');
+    REGION_AUTO_CANDIDATES.forEach(function(region){setRegionRowPing(kind,region,Infinity);});
+  });
+}
+function setupRegionPicker(kind){
+  var cfg=REGION_UI_CONFIG[kind];
+  if(!cfg)return;
+  var button=document.getElementById(cfg.buttonId),panel=document.getElementById(cfg.panelId),list=document.getElementById(cfg.listId);
+  if(!button || !panel || !list || button.dataset.ready==='1')return;
+  button.dataset.ready='1';
+  list.innerHTML='';
+  REGION_AUTO_CANDIDATES.forEach(function(region){
+    var row=document.createElement('button');
+    row.type='button';
+    row.className='region-option';
+    row.setAttribute('data-region',region);
+    row.setAttribute('data-ms','none');
+    row.innerHTML='<span class="region-copy"><strong>'+regionLabel(region)+'</strong><small>'+regionDesc(region)+'</small></span><span class="region-ping">--</span>';
+    row.addEventListener('click',function(){
+      setRegionPref(region);
+      updateRegionSelectionUI();
+      if(cfg.joinNote)regionMetaText(kind,'Preferência salva em '+regionLabel(region)+'. Ao entrar, a sala ainda segue a região criada pelo anfitrião.');
+      else regionMetaText(kind, region==='auto' ? 'Preferência salva em modo automático. O jogo vai escolher a melhor rota ao criar a sala.' : ('Preferência salva em '+regionLabel(region)+'. A próxima sala será criada nessa região.'));
+      Sfx.ui();
+    });
+    list.appendChild(row);
+  });
+  button.addEventListener('click',function(ev){
+    ev.stopPropagation();
+    var willOpen=panel.hidden;
+    closeRegionPanels();
+    panel.hidden=!willOpen;
+    if(willOpen) refreshRegionPanel(kind,true);
+    Sfx.ui();
+  });
+  panel.addEventListener('click',function(ev){ev.stopPropagation();});
+}
+function setupRegionPickers(){
+  ['host','join'].forEach(setupRegionPicker);
+  updateRegionSelectionUI();
+}
+function selectedRegionPref(){ return readRegionPref(); }
+function connectRegionText(region,ms,isAuto){
+  if(isAuto){
+    if(region && region!=='auto')return 'automática · '+regionLabel(region)+(Number.isFinite(ms)?(' · '+formatRegionPing(ms)):'');
+    return 'automática';
+  }
+  return regionLabel(region)+(Number.isFinite(ms)?(' · '+formatRegionPing(ms)):'');
+}
+if(typeof document!=='undefined' && !document.documentElement.dataset.regionPickerBound){
+  document.documentElement.dataset.regionPickerBound='1';
+  document.addEventListener('click',function(){ closeRegionPanels(); });
+}
+
 function isCloudflareEndpoint(wsEndpoint){
   try { return /\.workers\.dev$/i.test(new URL(wsEndpoint).hostname); }
   catch(e){return false;}
@@ -4945,6 +5212,147 @@ function safeRemoteProfile(p){
 function safePeerName(n){
   return (typeof n==='string'?n:'RIVAL').toUpperCase().replace(/[^A-Z0-9_]/g,'').slice(0,12)||'RIVAL';
 }
+/* Canal direto opcional para duelos. WebSocket continua fazendo a sinalizacao e
+   substitui automaticamente o WebRTC quando NAT/operadora impede a conexao. */
+var PeerDirect={
+  pc:null,control:null,fast:null,peerSid:'',initiated:false,
+  tryAt:0,iceQueue:[],enabled:typeof RTCPeerConnection!=='undefined',
+  ready:function(){return !!(this.control && this.control.readyState==='open');},
+  usingDirect:function(){return this.ready();},
+  close:function(){
+    var pc=this.pc;
+    this.pc=null;this.control=null;this.fast=null;this.peerSid='';
+    this.initiated=false;this.iceQueue=[];
+    if(pc){
+      pc.onicecandidate=null;pc.ondatachannel=null;
+      pc.onconnectionstatechange=null;
+      try{pc.close();}catch(_e){}
+    }
+  },
+  send:function(msg){
+    if(!this.ready())return false;
+    var quick=(msg.t==='s'||(msg.t==='i'&&!msg.b));
+    var dc=quick&&this.fast&&this.fast.readyState==='open'?this.fast:this.control;
+    if(!dc||dc.readyState!=='open'||dc.bufferedAmount>(quick?56000:100000))return false;
+    try{dc.send(JSON.stringify(msg));return true;}catch(_e){return false;}
+  },
+  signal:function(kind,data){
+    if(!Net.client||!Net.client.online||!Net.code)return false;
+    return Net.signal({t:'rtc',v:1,kind:kind,sid:Net.session,data:data});
+  },
+  bindChannel:function(channel,kind){
+    var self=this;
+    if(kind==='fast')this.fast=channel;else this.control=channel;
+    try{channel.binaryType='arraybuffer';}catch(_e){}
+    channel.onmessage=function(ev){
+      if(self.pc===null || typeof ev.data!=='string'||ev.data.length>55000)return;
+      try{
+        var msg=JSON.parse(ev.data);
+        if(msg&&typeof msg.t==='string'&&msg.t!=='rtc'){
+          Net.lastRx=Date.now();Net.handle(msg);
+        }
+      }catch(_e){}
+    };
+    channel.onopen=function(){
+      if(kind==='control'&&self.control===channel){
+        Net.lastRx=Date.now();
+        if(G.mode==='host'||G.mode==='guest')toast('CONEXÃO DIRETA',1100);
+        if(Net.role==='guest')Net.pub({t:'p',ts:Date.now(),rtt:Net.rtt});
+      }
+    };
+    channel.onclose=function(){
+      if(kind==='control'&&self.control===channel){
+        if(Net.client&&Net.client.online)Net.state='on';
+        if(G.mode==='host'||G.mode==='guest')toast('CONEXÃO VIA SERVIDOR',1100);
+      }
+    };
+    channel.onerror=function(){};
+  },
+  create:function(peerSid,host){
+    if(!this.enabled)return null;
+    this.close();this.peerSid=peerSid;this.initiated=!!host;this.tryAt=Date.now();
+    var self=this,pc;
+    try{
+      pc=new RTCPeerConnection({iceServers:[
+        {urls:'stun:stun.l.google.com:19302'},
+        {urls:'stun:stun.cloudflare.com:3478'}
+      ],iceCandidatePoolSize:0});
+    }catch(e){this.close();return null;}
+    this.pc=pc;
+    pc.onicecandidate=function(ev){
+      if(self.pc!==pc||!ev.candidate)return;
+      self.signal('ice',ev.candidate.toJSON?ev.candidate.toJSON():ev.candidate);
+    };
+    pc.onconnectionstatechange=function(){
+      if(self.pc!==pc)return;
+      if(pc.connectionState==='failed'||pc.connectionState==='closed'){
+        var directWasActive=self.ready();self.close();
+        if(directWasActive && (G.mode==='host'||G.mode==='guest'))toast('CONEXÃO VIA SERVIDOR',1100);
+      }
+    };
+    pc.ondatachannel=function(ev){
+      if(self.pc!==pc)return;
+      if(ev.channel.label==='pc-fast')self.bindChannel(ev.channel,'fast');
+      else if(ev.channel.label==='pc-control')self.bindChannel(ev.channel,'control');
+    };
+    if(host){
+      this.bindChannel(pc.createDataChannel('pc-control',{ordered:true}),'control');
+      this.bindChannel(pc.createDataChannel('pc-fast',{ordered:false,maxRetransmits:0}),'fast');
+    }
+    return pc;
+  },
+  hostOffer:function(peerSid){
+    if(!this.enabled||!Net.client||!Net.client.online||!peerSid)return;
+    if(this.pc&&this.peerSid===peerSid)return;
+    var pc=this.create(peerSid,true);
+    if(!pc)return;
+    var self=this;
+    pc.createOffer().then(function(offer){return pc.setLocalDescription(offer);})
+      .then(function(){if(self.pc===pc)self.signal('offer',pc.localDescription);})
+      .catch(function(){if(self.pc===pc)self.close();});
+  },
+  addIce:function(pc,candidate){
+    try{
+      return pc.addIceCandidate(new RTCIceCandidate(candidate)).catch(function(){});
+    }catch(_e){return Promise.resolve();}
+  },
+  drainIce:function(pc){
+    if(this.pc!==pc||!pc.remoteDescription)return;
+    var list=this.iceQueue.splice(0,40),self=this;
+    list.forEach(function(c){self.addIce(pc,c);});
+  },
+  receiveSignal:function(m){
+    if(!this.enabled||!m||m.v!==1||!m.kind||!m.data||typeof m.sid!=='string'||m.sid===Net.session)return;
+    var self=this,pc;
+    if(m.kind==='offer'){
+      if(Net.role!=='guest'||!m.data.sdp||m.data.type!=='offer')return;
+      if(this.pc&&this.peerSid===m.sid&&this.pc.signalingState!=='closed')return;
+      pc=this.create(m.sid,false);if(!pc)return;
+      pc.setRemoteDescription(new RTCSessionDescription(m.data)).then(function(){
+        if(self.pc!==pc)return;
+        self.drainIce(pc);
+        return pc.createAnswer();
+      }).then(function(answer){
+        if(self.pc!==pc||!answer)return;
+        return pc.setLocalDescription(answer);
+      }).then(function(){if(self.pc===pc)self.signal('answer',pc.localDescription);})
+        .catch(function(){if(self.pc===pc)self.close();});
+    }else if(m.kind==='answer'){
+      if(Net.role!=='host'||!this.pc||this.peerSid!==m.sid||m.data.type!=='answer')return;
+      pc=this.pc;
+      if(pc.signalingState!=='have-local-offer')return;
+      pc.setRemoteDescription(new RTCSessionDescription(m.data))
+        .then(function(){self.drainIce(pc);})
+        .catch(function(){if(self.pc===pc)self.close();});
+    }else if(m.kind==='ice'){
+      if(!this.pc||this.peerSid!==m.sid||typeof m.data.candidate!=='string')return;
+      pc=this.pc;
+      if(pc.remoteDescription)this.addIce(pc,m.data);
+      else if(this.iceQueue.length<40)this.iceQueue.push(m.data);
+    }
+  }
+};
+
 var Net={
   client:null, code:'', role:null, state:'off', peerProf:null,
   onStart:null, onState:null, onLost:null, lastRx:0, rtt:0, jitter:0,
@@ -4952,9 +5360,11 @@ var Net={
   announced:0, lastSnapMs:0, snapDt:0.033, pendingActs:[],
   myRematch:false, peerRematch:false, peerName:'',
   retryNoticeAt:0, pingAt:0, actionAck:0, eventId:0, eventRepeat:0, peerSession:'', session:'',
+  predictedAction:null,lastAimAt:0,lastImmediateMoveAt:0,
 
   connect:function(code,role,cb,url,region){
     var self=this;
+    PeerDirect.close();
     self.code=code; self.role=role;
     var endpoint=url || serverEndpoint(readServerUrl());
     if(!endpoint){cb(new Error('Informe o endereço HTTPS do servidor multiplayer'));return;}
@@ -4990,6 +5400,9 @@ var Net={
         self.sendInput(input.move,G.player?G.player.aim:0,0);
       } else if(role==='host' && wasReconnecting){
         self.pub({t:'host'});
+        if(self.peerSession && !PeerDirect.ready()){
+          PeerDirect.close();PeerDirect.hostOffer(self.peerSession);
+        }
       }
       if(wasReconnecting && G.mode===role) toast('CONEXÃO RECUPERADA',1100);
     });
@@ -5002,21 +5415,32 @@ var Net={
     });
     client.on('close',function(){
       if(self.client!==client) return;
-      self.state='reconnecting';self.reconnecting=true;
-      self.retryNoticeAt=0;self.pendingActs=[];
-      netInput.move=0; // nunca continuar andando com intenção remota antiga
+      self.state=PeerDirect.ready()?'on':'reconnecting';self.reconnecting=true;
+      self.retryNoticeAt=0;
+      if(!PeerDirect.ready()){
+        self.pendingActs=[];
+        netInput.move=0; // não manter comando antigo quando ambas as rotas caem
+      }
     });
     client.on('error',function(err){
       if(self.client!==client) return;
       self.lastError=err;
     });
   },
-  pub:function(m){
-    if(!this.client || this.state!=='on') return false;
+  signal:function(m){
+    if(!this.client||!this.client.online)return false;
     var topic=ROOM_PREFIX+this.code+(this.role==='host'?'/h':'/g');
     return this.client.publish(topic,JSON.stringify(m));
   },
+  pub:function(m){
+    if(!this.client || (this.state!=='on'&&!PeerDirect.ready()))return false;
+    // WebRTC preferencial: estados e movimento vão pelo canal rápido;
+    // ações, confirmações e ping usam canal confiável.
+    if(PeerDirect.ready() && PeerDirect.send(m))return true;
+    return this.signal(m);
+  },
   handle:function(m){
+    if(m.t==='rtc') {PeerDirect.receiveSignal(m);return;}
     if(this.role==='host'){
       if(m.t==='join' && this.state==='on'){
         if(typeof m.sid==='string' && this.peerSession!==m.sid){
@@ -5027,6 +5451,8 @@ var Net={
         this.pub({t:'accept',prof:profile,name:getNick(),g:MATCH_GEN.v});
         this.lastRx=Date.now();
         if(!this.started && this.onStart){this.started=true;this.onStart();}
+        // WebSocket apenas sinaliza o par. Duelo migra ao canal direto quando abrir.
+        PeerDirect.hostOffer(this.peerSession);
       }else if(m.t==='i'){
         // Intenções contínuas têm sua própria sequência, independente das ações.
         if(typeof m.sid==='string' && this.peerSession && m.sid!==this.peerSession)return;
@@ -5102,7 +5528,7 @@ var Net={
     }
     this.pub(msg);
   },
-  action:function(bit){this.sendInput(input.move,G.player?G.player.aim:0,bit);},
+  action:function(bit){this.sendInput(input.move,G.player?G.player.aim:0,bit);return this.seq;},
   tick:function(){
     if(this.role!=='guest' || this.state!=='on') return;
     var now=Date.now();
@@ -5123,12 +5549,14 @@ var Net={
   },
   byebye:function(){this.pub({t:'bye'});},
   close:function(){
-    if(this.client){this.byebye();this.client.end();}
+    if(this.client)this.byebye();
+    PeerDirect.close();
+    if(this.client)this.client.end();
     if(typeof joinTimer!=='undefined' && joinTimer){clearTimeout(joinTimer);joinTimer=null;}
     this.client=null;this.state='off';this.role=null;this.started=false;
     this.reconnecting=false;this.peerSession='';this.lastInputSeq=0;
     this.onStart=null;this.onState=null;this.onLost=null;
-    this.pendingActs=[];
+    this.pendingActs=[];this.predictedAction=null;this.lastAimAt=0;
   },
   bye:function(){
     var alreadyOver=(typeof G!=='undefined'&&G&&G.phase==='over');
@@ -5458,6 +5886,9 @@ function showRoomHost(){
   Net.session=makeCode(8)+makeCode(8);
   Net.phase = 'waiting';
   initServerFields();
+  setupRegionPickers();
+  updateRegionSelectionUI();
+  closeRegionPanels();
   var el = document.getElementById('roomCode');
   el.textContent = code;
   var nk = document.getElementById('inpNickHost');
@@ -5472,13 +5903,33 @@ function showRoomHost(){
       document.getElementById('hostStatus').textContent='informe o endereço HTTPS do servidor e toque CONECTAR';
       document.getElementById('hostStatus').classList.add('err'); return;
     }
+    var preferredRegion=selectedRegionPref();
+    var cloudServer=isCloudflareEndpoint(server);
     document.getElementById('hostStatus').classList.remove('err');
-    document.getElementById('hostStatus').textContent=isCloudflareEndpoint(server)
-      ?'testando regiões automaticamente…':'conectando ao servidor…';
-    pickBestRegion(server).then(function(choice){
-      // Não abrir sala antiga se o usuário saiu ou tocou conectar novamente.
+    var chooseRegionPromise;
+    if(cloudServer){
+      if(preferredRegion==='auto'){
+        document.getElementById('hostStatus').textContent='testando regiões automaticamente…';
+        chooseRegionPromise=pickBestRegion(server).then(function(choice){
+          return {requested:'auto',region:choice.region||'auto',ms:choice.ms,isAuto:true};
+        });
+      }else{
+        document.getElementById('hostStatus').textContent='medindo '+regionLabel(preferredRegion).toLowerCase()+'…';
+        chooseRegionPromise=measureRegion(server,preferredRegion).then(function(choice){
+          return {requested:preferredRegion,region:preferredRegion,ms:Number.isFinite(choice.ms)?choice.ms:null,isAuto:false};
+        }).catch(function(){
+          return {requested:preferredRegion,region:preferredRegion,ms:null,isAuto:false};
+        });
+      }
+    }else{
+      document.getElementById('hostStatus').textContent='conectando ao servidor…';
+      chooseRegionPromise=Promise.resolve({requested:preferredRegion,region:null,ms:null,isAuto:false});
+    }
+    chooseRegionPromise.then(function(choice){
       if(ticket!==hostRegionTicket || document.getElementById('scrHost').classList.contains('hidden'))return;
-      document.getElementById('hostStatus').textContent='conectando à melhor rota disponível…';
+      document.getElementById('hostStatus').textContent=cloudServer
+        ?('conectando · '+connectRegionText(choice.region,choice.ms,choice.isAuto)+'…')
+        :'conectando ao servidor…';
       Net.startHost(code, function(err){
         if(ticket!==hostRegionTicket)return;
         if (err){
@@ -5488,13 +5939,15 @@ function showRoomHost(){
         }
         Net.announced = 0;
         Net.seq = 0; Net.snapSeq = 0; Net.lastSnapshotSeq = 0;
-        Net.inputSeq=0;Net.lastInputSeq=0;Net.pendingActs=[];
+        Net.inputSeq=0;Net.lastInputSeq=0;Net.pendingActs=[];Net.predictedAction=null;
         MATCH_GEN.v=0;
         netLastSeq = 0; netInput.move = 0; netInput.aim = 0;
-        document.getElementById('hostStatus').textContent = 'conectado · região automática · aguardando oponente…';
+        document.getElementById('hostStatus').textContent = cloudServer
+          ?('conectado · '+connectRegionText(choice.region,choice.ms,choice.isAuto)+' · aguardando oponente…')
+          :'conectado · aguardando oponente…';
         Net.pub({ t:'host' }, 0);
         Social.afterHostReady(code);
-      }, server, choice.region);
+      }, server, cloudServer?choice.region:null);
     });
   }
   document.getElementById('btnNetHost').onclick=function(){
@@ -5525,6 +5978,9 @@ function showRoomJoin(autoCode){
   document.getElementById('scrJoin').classList.remove('hidden');
   document.getElementById('joinStatus').textContent = '';
   initServerFields();
+  setupRegionPickers();
+  updateRegionSelectionUI();
+  closeRegionPanels();
   var inp = document.getElementById('inpCode');
   inp.value = autoCode || '';
   var nk = document.getElementById('inpNick');
@@ -5547,11 +6003,15 @@ function doJoin(){
   Net.seq = 0; Net.lastSnapshotSeq = 0; Net.snapSeq = 0;
   input.move=0;
   Net.inputSeq=0; Net.lastInputSeq=0; Net.actionAck=0; Net.pendingActs=[];
+  Net.predictedAction=null;Net.lastAimAt=0;
   Net.startedOnce=false;
   Net.session=makeCode(8)+makeCode(8);
   netLastSeq = 0; netInput.move = 0; netInput.aim = 0;
   joinTries = 0;
-  setJoinStatus('procurando sala…');
+  var joinRegion=selectedRegionPref();
+  setJoinStatus(isCloudflareEndpoint(server)
+    ?('procurando sala… · '+(joinRegion==='auto'?'rota automática':(regionLabel(joinRegion)+' (sala segue o anfitrião)')))
+    :'procurando sala…');
   Net.role = 'guest';
   Net.state = 'off';
   Net.onLost = function(){ netLost(); };
@@ -5716,7 +6176,7 @@ function guestStep(f, dt){
 var guestRemoteBuffer=[];
 function guestRemotePosition(now){
   if(!guestRemoteBuffer.length) return null;
-  var delay=clamp(90+(Net.jitter||0)*1.35,90,170);
+  var delay=clamp(48+(Net.jitter||0)*0.70,48,115);
   var target=now-delay;
   while(guestRemoteBuffer.length>2 && guestRemoteBuffer[1].time<target) guestRemoteBuffer.shift();
   var a=guestRemoteBuffer[0], b=guestRemoteBuffer[1];
@@ -5726,9 +6186,9 @@ function guestRemotePosition(now){
     var t=(target-a.time)/Math.max(1,b.time-a.time);
     return lerp(a.x,b.x,clamp01(t));
   }
-  // Extrapola só 45ms: não deixa um personagem atravessar o cenário.
-  if(now-b.time>340) return b.x;
-  var lag=clamp(target-b.time,0,45);
+  // Extrapolação curta para reduzir a sensação de atraso, sem atravessar a arena.
+  if(now-b.time>280) return b.x;
+  var lag=clamp(target-b.time,0,65);
   var speed=clamp((b.x-a.x)/Math.max(16,b.time-a.time),-0.30,0.30);
   return b.x+speed*lag;
 }
@@ -5768,6 +6228,7 @@ function applySnapshot(m){
   var wasDeadP = G.player && G.player.state === 'dead';
   var wasDeadE = G.enemy && G.enemy.state === 'dead';
   var forceReset = (m.r !== prevRound) || (prevPhase !== m.ph && m.ph==='intro');
+  if(forceReset)Net.predictedAction=null;
   setSnap(G.player, m.e, true, forceReset);
   setSnap(G.enemy, m.p, false, false);
   if (forceReset && G.player) G.player.swordSheathed = false;
@@ -5806,13 +6267,25 @@ function fxKill(f){
 function setSnap(f, a, local, force){
   if (!f || !a) return;
   f.tx = a[0];
-  f.fatigue = a[7];
   if (f.x === undefined) f.x = a[0];
   var st = STATES[a[1]] || 'idle';
+  // O pacote remoto foi gerado antes de atravessar a rede. Não deixar um
+  // pacote antigo cancelar um golpe/esquiva que o convidado acabou de fazer.
+  // A correção volta a ser autoritativa após uma janela curta e limitada.
+  var pred=local && Net.predictedAction;
+  var predAge=pred?(Date.now()-pred.at):Infinity;
+  var predictHold=Math.min(680,Math.max(260,(Net.rtt||260)*1.05+120));
+  if(local && !force && pred && predAge<predictHold &&
+     st!=='dead' && st!=='stagger' && G.phase==='fight'){
+    return;
+  }
+  if(pred && (force || predAge>=predictHold || st==='dead' || st==='stagger'))Net.predictedAction=null;
+  f.fatigue = a[7];
 
-  // O host é a autoridade do combate. O guest ainda prevê o movimento entre
-  // snapshots, mas estado, tempo, cooldowns e resultados sempre são reconciliados.
-  f.aim = a[2];
+  // O host é a autoridade do combate. A previsão só mantém o tempo visual
+  // enquanto ainda não chegou uma confirmação relevante.
+  var keepLocalAim=local && !force && Date.now()-(Net.lastAimAt||0)<Math.min(740,Math.max(240,(Net.rtt||260)*1.1+120));
+  if(!keepLocalAim)f.aim = a[2];
   // Não reiniciar o relógio da animação a cada snapshot recebido.
   // Só ajustar desvios maiores, evitando microtravadas visuais.
   if(force || f.state!==st || !Number.isFinite(f.t) || Math.abs(f.t-a[3])>0.35) f.t=a[3];
@@ -5932,11 +6405,15 @@ function update(dt){
           // simulação local completa do próprio corpo (golpe, guarda, recuo)
           stepFighter(pl, dt, en);
           pl.x = clamp(pl.x, arenaMin(), arenaMax());
-          // reconciliação: erro grande corrige na hora, erro pequeno suaviza
+          // Faixa de tolerância para o movimento previsto: evita o efeito
+          // "elástico" de cada snapshot atrasado puxando o jogador para trás.
           if(pl.tx!==undefined){
-            var dpx=pl.tx-pl.x;
-            if(Math.abs(dpx)>60) pl.x=pl.tx;
-            else pl.x+=dpx*clamp01(dt*(Math.abs(input.move)<0.15?5.5:2.6));
+            var dpx=pl.tx-pl.x,absDx=Math.abs(dpx);
+            var tolerance=Math.abs(input.move)>0.12?16:7;
+            if(absDx>75) pl.x=pl.tx;
+            else if(absDx>tolerance){
+              pl.x+=Math.sign(dpx)*(absDx-tolerance)*clamp01(dt*2.0);
+            }
           }
         } else {
           guestStep(pl, dt);
@@ -6476,6 +6953,7 @@ function buildTags(){
    20. BOOT
    ========================================================= */
 resize();
+setupRegionPickers();
 showScreens('scrTitle');
 setupCharOptionsScroller(); buildSwatches(); buildTags(); syncMainNick(); syncSoundButton();
 if(serverEndpoint(readServerUrl()||(/^https?:$/.test(location.protocol)?location.origin:''))) Social.start(readServerUrl()||location.origin);
