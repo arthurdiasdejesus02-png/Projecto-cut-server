@@ -1,0 +1,36 @@
+name: Preparar Projecto Cut para Cloudflare
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/extrair-pacote.yml'
+      - 'projecto_cut_cloudflare_pronto_publicacao.zip'
+
+permissions:
+  contents: write
+
+jobs:
+  extrair-servidor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Buscar repositorio
+        uses: actions/checkout@v4
+      - name: Extrair o pacote oficial do Projecto Cut
+        run: |
+          unzip -o -q projecto_cut_cloudflare_pronto_publicacao.zip -d .
+          node --check src/index.js
+          test -f wrangler.toml
+          test -f package.json
+          test -f "public/projecto cut.html"
+      - name: Enviar arquivos extraidos ao repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/index.js "public/projecto cut.html" wrangler.toml package.json .gitignore COMO-PUBLICAR.md
+          if git diff --staged --quiet; then
+            echo "Arquivos ja presentes."
+            exit 0
+          fi
+          git commit -m "Adicionar arquivos do servidor Cloudflare extraidos do pacote"
+          git push origin HEAD:main
